@@ -14,7 +14,9 @@ def  inform(format_string: str, bulls: int, cows: int) -> None:
 
 
 def ask(prompt: str, valid: list[str] = None) -> str:
-    random_cow(prompt)
+    with open('R2-D2.cow','r') as my_cow_file:
+        my_cow=cowsay.read_dot_cow(my_cow_file)
+        print(cowsay.cowsay(prompt,cowfile=my_cow))
     if valid == None:
         return input()
     else:
@@ -26,9 +28,9 @@ def ask(prompt: str, valid: list[str] = None) -> str:
 
 
 def bullscows(guess: str, secret: str) -> (int, int):
-    bools = [(guess[i] == secret[i]) for i in range(min(len(guess),len(secret)))].count(True)
+    bulls = [(guess[i] == secret[i]) for i in range(min(len(guess),len(secret)))].count(True)
     cows = len(set(guess).intersection(set(secret)))
-    return (bools, cows)
+    return (bulls, cows)
 
 def get_dictionary(file:str)->list[str]:
     try:
@@ -55,6 +57,7 @@ def gameplay(ask:callable, inform:callable, words:list[str])-> int:
         inform("Быки: {}, Коровы: {}", bulls, cows)
         if word==guess:
             print(f'Потребовалось {tries} попыток')
+            exit()
 
 
 
@@ -68,7 +71,7 @@ try:
         wordslen=int(sys.argv[2])
     else:
         wordslen=5
-    dictioonary=[i for i in dictionary if len(i)==wordslen]
+    dictionary=[i for i in dictionary if len(i)==wordslen]
     gameplay(ask, inform, dictionary)
 except Exception as e:
     print("Error")
