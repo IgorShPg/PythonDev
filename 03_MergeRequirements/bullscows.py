@@ -4,15 +4,17 @@ import sys
 import urllib.request
 
 
-def print_random_cow(strok: str)->str:
-    print(cowsay.cowsay(strok))
+def random_cow(strok: str)->str:
+    who=random.choice(cowsay.list_cows())
+    print(cowsay.cowsay(strok, cow=who))
 
 
 def  inform(format_string: str, bulls: int, cows: int) -> None:
-    print(format_string.format(bulls, cows))
+    random_cow(format_string.format(bulls, cows))
 
 
 def ask(prompt: str, valid: list[str] = None) -> str:
+    random_cow(prompt)
     if valid == None:
         return input()
     else:
