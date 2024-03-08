@@ -14,17 +14,20 @@ COMPLETE = {"cowsay": COWSAY_COMPLETE, "cowthink": COWTHINK_COMPLETE, "make_bubb
 def parse(args):
     return shlex.split(args)
 
-def get_optional_args(args, default_values):
+def get_opt_arg(args, default_values):
     i = 0
-    opt_args = {key: val[0] for key, val in default_values.items()}
+    znach = {key: val[0] for key, val in default_values.items()}
     while i < len(args):
-        opt_args[args[i]] = default_values[args[i]][1](args[i + 1])
+        znach[args[i]] = default_values[args[i]][1](args[i + 1])
         i += 2
-    return opt_args
+    return znach
 
 
 def complete(text, line, begidx, endidx):
-    key, command = shlex.split(line)[-1] if begidx == endidx else shlex.split(line)[-2], shlex.split(line)[0]
+    if begidx == endidx :
+        key, command = shlex.split(line)[-1] 
+    else:
+        key, command = shlex.split(line)[-2], shlex.split(line)[0]
     return [s for s in COMPLETE[command][key] if s.startswith(text)]
 
 
@@ -49,9 +52,9 @@ class COWS(cmd.Cmd):
             -d      :  width
             -w      :  wrap_text
         """
-        message, *opt_args = parse(args)
-        opt_args = get_optional_args(opt_args, MAKE_BUBBLE_DEFAULTS)
-        print(cowsay.make_bubble(message, brackets=cowsay.THOUGHT_OPTIONS[opt_args["-b"]], width=opt_args["-d"],wrap_text=opt_args["-w"]))
+        message, *znach = parse(args)
+        znach = get_opt_arg(znach, MAKE_BUBBLE_DEFAULTS)
+        print(cowsay.make_bubble(message, brackets=cowsay.THOUGHT_OPTIONS[znach["-b"]], width=znach["-d"],wrap_text=znach["-w"]))
 
     def complete_make_bubble(self, text, line, begidx, endidx):
         return complete(text, line, begidx, endidx)
@@ -67,9 +70,9 @@ class COWS(cmd.Cmd):
             -e      :  строка - глаза коровы;
             -T      :  строка - язык коровы;
         """
-        message, *opt_args = parse(args)
-        opt_args = get_optional_args(opt_args, COWSAY_DEFAULTS)
-        print(cowsay.cowsay(message, cow=opt_args["-c"], eyes=opt_args["-e"], tongue=opt_args["-T"]))
+        message, *znach = parse(args)
+        znach = get_opt_arg(znach, COWSAY_DEFAULTS)
+        print(cowsay.cowsay(message, cow=znach["-c"], eyes=znach["-e"], tongue=znach["-T"]))
 
     def complete_cowsay(self, text, line, begidx, endidx):
         return complete(text, line, begidx, endidx)
