@@ -58,7 +58,7 @@ async def chat(reader, writer):
                     case ["say", cow, *message]:
                         if my_name!="":
                             if cow in cows_in_chat:
-                                await cows_in_chat[cow].put(cowsay.cowsay("".join(message), cow=cows_chatting[clients[me]]))
+                                await cows_in_chat[cow].put("" + cowsay.cowsay("".join(message), cow=cows_chatting[clients[me]]))
                             else:
                                 await clients[me].put("There is no cow with such name")
                         else:
@@ -69,7 +69,7 @@ async def chat(reader, writer):
                         if my_name!="":
                             for cow in cows_in_chat:
                                 if cows_in_chat[cow] != clients[me]:
-                                    await cows_in_chat[cow].put(cowsay.cowsay("".join(message), cow=cows_chatting[clients[me]]))
+                                    await cows_in_chat[cow].put("" + cowsay.cowsay("".join(message), cow=cows_chatting[clients[me]]))
                         else:
                            await clients[me].put("Before chatting you must log in") 
                     case ["quit"]:
